@@ -8,7 +8,7 @@
 
 | Date | Version | Description | Author |
 | ----- | ----- | ----- | ----- |
-| \<dd/mmm/yy\> | \<x.x\> | \<details\> | \<name\> |
+| 04/10/2026 | 1.1 | Instructor can see list of students who have not submitted weekly assignments | Angelette Munoz |
 |  |  |  |  |
 |  |  |  |  |
 |  |  |  |  |
@@ -30,26 +30,60 @@ The headings below describe each field of the use-case template (Wiegers & Beatt
 ***Use Case ID and Name***
 *Give each use case a unique integer sequence number identifier. State a concise name for the use case that indicates the value the use case would provide to some user. Begin with an action verb, followed by an object.*
 
+UC-NOT-view-incomplete-submissions
+
 ***Author and Date Created***
 *Enter the name of the person who initially wrote this use case and the date it was written.*
+Angelette Munoz, 10-04-2026
 
 ***Primary and Secondary Actors***
 *An actor is a person or other entity external to the software system being specified who interacts with the system and performs use cases to accomplish tasks. Different actors often correspond to different user classes, or roles, identified from the customer community that will use the product. Name the primary actor that will be initiating this use case and any other secondary actors who will participate in completing execution of the use case.*
+Primary Actor: Instructor
+
+Secondary Actor: I don't think there are any secondary actors. If there is one, it could be the students. But no Secondary actor
 
 ***Trigger***
 *Identify the business event, system event, or user action that initiates the use case. This trigger alerts the system that it should begin testing the preconditions for the use case so it can judge whether to proceed with execution.*
 
+Instructor can access and view a list of students that have not submitted required activities for the week.
+
 ***Description***
 *Provide a brief description of the reason for and outcome of this use case, or a high-level description of the sequence of actions and the outcome of executing the use case.*
+
+The instructor wants to identify students with incomplete weekly activity reports or peer evaluations so that they can decide whether further action is needed. Or to right away know who to give zeros to.
 
 ***Preconditions***
 *List any activities that must take place, or any conditions that must be true, before the use case can be started. The system must be able to test each precondition. Number each precondition. Example: PRE-1: User's identity has been authenticated.*
 
+PRE-1: The instructor has to be logged on to the project pulse website
+
+PRE-2: Instructor has access to the course section on project pulse.
+
+PRE-3: Has to select the week that is going to be viewed.
+
+PRE-4: The week selected has to be current week or past week.
+
 ***Postconditions***
 *Describe the state of the system at the successful conclusion of the use case execution. Label each postcondition in the form POST-X, where X is a sequence number. Example: POST-1: Price of item in the database has been updated with the new value.*
 
+POST-1: the system will display the students who have not submitted their weekly submissions. Must be from selected course.
+
+POST-2: For each student that hasn't submitted an activity, the system will display which submission hasn't been completed.
+
+POST-3: No one is allowed or able to see which students are missing assignments from sections that isn't from the one selected.
+
 ***Main Success Scenario/Normal Flow***
 *Provide a description of the user actions and corresponding system responses that will take place during execution of the use case under normal, expected conditions. This dialog sequence will ultimately lead to accomplishing the goal stated in the use case name and description. Show a numbered list of actions performed by the actor, alternating with responses provided by the system. The normal flow is numbered "X.0", where "X" is the use case ID.*
+
+1. The instructor selects a course section and week.
+2. The system verifies that the instructor is authorized to access the selected course section.
+3. The system determines whether a weekly activity report, peer evaluation, or both are required for the selected week.
+4. The system considers only students assigned to a team.
+5. The system checks each required submission independently for each student that is assignmed to a team and in the course section selected.
+6. The system classifies a required submission as incomplete when no submission exists for the submission period.
+7. The system excludes students who have completed all required submissions.
+8. The system displays the incomplete-submission list, including each student's name, email address, and incomplete submission type or types.
+9. Use case ends.
 
 ***Extensions:***
 
@@ -59,20 +93,81 @@ The headings below describe each field of the use-case template (Wiegers & Beatt
 - ***Exceptions***
   *Describe any anticipated error conditions that could occur during execution of the use case and how the system is to respond to those conditions. Number each alternative flow in the form "X.Y.EZ", where "X" is the use case ID, Y indicates the normal (0) or alternative (>0) flow during which this exception could take place, "E" indicates an exception, and "Z" is a sequence number for the exceptions. For example "5.0.E2" would indicate the second exception for the normal flow for use case number 5. Indicate where in the normal (or an alternative) flow each exception could occur.*
 
+- 2a. The instructor is not assigned to the selected course section:
+  - 2a1. The system denies access to the course section and its student submission records.
+  - 2a2. The system lets the instructor that they may access only their assigned course sections.
+  - 2a3. Use case ends.
+
+- 3a. No submission is required for the selected week:
+  - 3a1. The system lets the instructor that no weekly submission is due for the selected week. (Fall Break, Thanksgiving, etc)
+  - 3a2. The system displays no non-submission list.
+  - 3a3. Use case ends.
+
+- 3b. The selected week is not active:
+  - 3b1. The system informs the instructor that submissions are not required during the selected week.(Fall Break, Thanksgiving, etc)
+  - 3b2. The system displays no non-submission list.
+  - 3b3. Use case ends.
+
+- 4a. A student is not assigned to a team:
+  - 4a1. The system excludes the student from the list because the student is not in a team so not able to submit the required artifacts.
+
+- 5a. A student completed one required submission but not another:
+  - 5a1. The system excludes the completed submission from the student's non-submission details.
+  - 5a2. The system identifies only the remaining incomplete submission.
+
+- 5b. A submission window has closed:
+  - 5b1. The system does not identify a closed submission as actionable for a reminder.
+  - 5b2. If another required submission remains open and incomplete, the system identifies that submission.
+  - 5b3. If all required submission windows have closed, the system excludes the student from the actionable non-submission list.
+
+- 6a. A student submitted and then deleted the submission:
+  - 6a1. The system treats the deleted submission as non-submission.
+  - 6a2. The system identifies the submission as incomplete if the submission window is still open.
+
+- 7a. No eligible students have non-submissions:
+  - 7a1. The system displays an empty result and informs the instructor that no eligible students have incomplete submissions.
+  - 7a2. Use case ends.
+
 ***Priority***
 *Indicate the relative priority of implementing the functionality required to allow this use case to be executed. Use the same priority scheme as that used for the functional requirements.*
+
+High
+?
 
 ***Frequency of Use***
 *Estimate the number of times this use case will be performed per some appropriate unit of time. This gives an early indicator of throughput, concurrent usage loads, and transaction capacity.*
 
+Multiple times a week. After WAR submission then after peer review submission.
+
 ***Business Rules***
 *List any business rules that influence this use case. Don't include the business rule text here, just its identifier so the reader can find it in another repository when needed.*
+BR-role-based-access, BR-section-scoped-access, BR-team-assignment-required, BR-active-weeks, BR-evaluation-submission-window, CO-ferpa
 
 ***Associated Information***
 *Identify any additional requirements, such as quality attributes, for the use case that may need to be addressed during design or implementation. Also list any associated functional requirements that aren't a direct part of the use case flows but which a developer needs to know about. Describe what should happen if the use case execution fails for some unanticipated or systemic reason (e.g., loss of network connectivity, timeout). If the use case results in a durable state change in a database or the outside world, state whether the change is rolled back, completed correctly, partially completed with a known state, or left in an undetermined state as a result of the exception.*
 
+The system will evaluate the WAR submission and peer evaluation independentely. Student's will be on that non-submission list if there is no submission for the submission period. if a student deletes the submission, that will also count as non-submission.
+
+The displayed information includes:
+
+| Property name | Data type | Validation rule | Security/access concerns | Reference to glossary |
+| ---- | ---- | ---- | ---- | ---- |
+| student name | String | Display only | Visible only to an instructor assigned to the selected course section | Student |
+| student email address | String | Display only | Visible only to an instructor assigned to the selected course section | Student |
+| selected course section |  | Must be the instructor's assigned section | Section-scoped access applies | Course Section |
+| selected week |  | Must be an active week | Must belong to the selected course section | Active Week |
+| incomplete submission type |  | Weekly activity report or peer evaluation | Visible only within the authorized section | Submission |
+
+Manual reminder sending and automatic reminder suppression are related behaviors but are outside this use case.
+(Copilot helped with the table)
+**Related Use Cases:** UC-NOT-send-reminder-to-incomplete-students; UC-NOT-suppress-completed-reminders; UC-EVA-submit-evaluation
+
 ***Assumptions***
 *List any assumptions that were made regarding this use case or how it might execute.*
+- The system can determine which activities are required for a selected week.
+- The system can determine the submission window for each activity.
+- The system retains submission records until the student deletes them.
+- The system can distinguish a deleted submission from a retained submission.
 
 # **Use Case List**
 
